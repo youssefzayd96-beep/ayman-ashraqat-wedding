@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعوة زفاف أيمن & أشرقت 💍✨</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: {
+                            50: '#fff5f7',
+                            100: '#ffe8ec',
+                            200: '#fecdd6',
+                            300: '#fda4b4',
+                            400: '#fb718d',
+                            500: '#f43f63',
+                            600: '#e11d48',
+                            700: '#be123c',
+                        },
+                        blush: {
+                            50: '#fff8f9',
+                            100: '#ffedf1',
+                            200: '#ffd6e0',
+                            300: '#fbaac1',
+                            400: '#f6729a',
+                            500: '#e84a7a',
+                        },
+                        goldAccent: {
+                            300: '#f3e5ab',
+                            400: '#e6ca65',
+                            500: '#d4af37',
+                            600: '#aa8c2c',
+                        },
+                        creamBg: '#FFFDF9',
+                    },
+                    fontFamily: {
+                        amiri: ['Amiri', 'serif'],
+                        ruqaa: ['Aref Ruqaa', 'serif'],
+                        cairo: ['Cairo', 'sans-serif'],
+                        tajawal: ['Tajawal', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FFFDF9;
+            color: #331A24;
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Vibrant Rose Gold & Warm Gradient Text */
+        .vibrant-gradient-text {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 35%, #d4af37 70%, #f43f63 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Card styling */
+        .cheerful-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(251, 113, 141, 0.25);
+            box-shadow: 0 12px 40px -10px rgba(225, 29, 72, 0.08);
+        }
+
+        .cheerful-card-hover {
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .cheerful-card-hover:hover {
+            transform: translateY(-4px);
+            border-color: rgba(225, 29, 72, 0.45);
+            box-shadow: 0 20px 40px -10px rgba(225, 29, 72, 0.16);
+        }
+
+        /* Floating Canvas Layer */
+        #hearts-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FFFDF9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #fda4b4;
+            border-radius: 99px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f43f63;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(225, 29, 72, 0.3)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 16px rgba(225, 29, 72, 0.6)); }
+        }
+        .pulse-heart {
+            animation: pulseGlow 2.5s infinite ease-in-out;
+        }
+
+        /* Music visualizer bars */
+        .music-bar {
+            width: 3px;
+            background-color: #f43f63;
+            border-radius: 3px;
+            animation: bounceBar 1.2s infinite ease-in-out alternate;
+        }
+        .music-bar:nth-child(1) { height: 12px; animation-delay: 0.1s; }
+        .music-bar:nth-child(2) { height: 18px; animation-delay: 0.3s; }
+        .music-bar:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+        .music-bar:nth-child(4) { height: 16px; animation-delay: 0.4s; }
+
+        @keyframes bounceBar {
+            0% { transform: scaleY(0.3); }
+            100% { transform: scaleY(1.1); }
+        }
+
+        .paused .music-bar {
+            animation-play-state: paused;
+            transform: scaleY(0.2);
+        }
+    </style>
+</head>
+<body class="bg-creamBg antialiased selection:bg-roseGold-200 selection:text-roseGold-700">
+
+    <!-- Interactive Floating Hearts/Petals Canvas -->
+    <canvas id="hearts-canvas"></canvas>
+
+    <!-- Floating Audio Status Indicator & Manual Toggle -->
+    <div id="musicContainer" onclick="toggleAudioManual()" 
+         class="fixed bottom-5 right-5 z-50 bg-white/95 backdrop-blur-md border-2 border-roseGold-300 rounded-full px-4 py-2.5 shadow-xl flex items-center gap-3 cursor-pointer hover:border-roseGold-500 transition-all select-none">
+        <div id="visualizer" class="flex items-end gap-0.5 h-5 paused">
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+        </div>
+        <span id="musicText" class="text-xs font-bold text-roseGold-700">الموسيقى هادية 🎵</span>
+        <i id="musicIcon" class="fas fa-volume-mute text-roseGold-500 text-sm"></i>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="max-w-4xl mx-auto px-4 py-6 relative z-20 space-y-12">
+
+        <!-- HERO SECTION -->
+        <section class="min-h-[85vh] flex flex-col justify-center items-center text-center pt-4 relative">
+            
+            <!-- Floral Header Accent -->
+            <div class="w-36 md:w-52 mb-4 relative">
+                <svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full text-roseGold-400 stroke-current">
+                    <path d="M20 40C50 10 80 70 100 40C120 10 150 70 180 40" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="100" cy="40" r="8" fill="#f43f63"/>
+                    <circle cx="60" cy="28" r="5" fill="#d4af37"/>
+                    <circle cx="140" cy="28" r="5" fill="#d4af37"/>
+                    <circle cx="20" cy="40" r="4" fill="#fb718d"/>
+                    <circle cx="180" cy="40" r="4" fill="#fb718d"/>
+                </svg>
+            </div>
+
+            <!-- Quranic Verse Banner -->
+            <div class="cheerful-card rounded-2xl p-6 md:p-8 max-w-2xl mx-auto mb-8 border-roseGold-200/80 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-20 h-20 bg-roseGold-100 rounded-bl-full opacity-50 -z-10"></div>
+                <div class="absolute bottom-0 left-0 w-20 h-20 bg-goldAccent-300 rounded-tr-full opacity-30 -z-10"></div>
+                
+                <p class="font-amiri text-roseGold-700 text-lg md:text-2xl leading-loose font-bold">
+                    "وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً"
+                </p>
+                <p class="text-xs text-roseGold-500 mt-2 font-bold">[سورة الروم: 21]</p>
+            </div>
+
+            <!-- Joyful Announcement & Names -->
+            <div class="my-4 space-y-4">
+                <span class="inline-block px-4 py-1.5 rounded-full bg-roseGold-100 text-roseGold-700 font-bold text-sm tracking-wide shadow-sm">
+                    ✨ فرحتنا كملت .. والعقبى عندكم ✨
+                </span>
+                
+                <p class="text-gray-700 font-bold text-base md:text-lg pt-2">يتشرف كل من العائلتين بدعوتكم لحضور حفل زفاف</p>
+                
+                <!-- Couple Names -->
+                <div class="flex flex-col md:flex-row items-center justify-center gap-2 md:gap-8 my-6">
+                    <h1 class="font-ruqaa text-6xl md:text-8xl font-bold vibrant-gradient-text drop-shadow-sm py-2">
+                        أيمـن
+                    </h1>
+                    
+                    <div class="my-1 md:my-0 text-roseGold-500 text-4xl pulse-heart">
+                        <i class="fas fa-heart"></i>
+                    </div>
+
+                    <h1 class="font-ruqaa text-6xl md:text-8xl font-bold vibrant-gradient-text drop-shadow-sm py-2">
+                        أشرقـت
+                    </h1>
+                </div>
+            </div>
+
+            <p class="text-gray-600 text-base md:text-lg max-w-lg font-medium leading-relaxed px-4">
+                فرحتنا مش هتكمل غير بيكم ومعاكم! استنونا في أجمل ليلة في حياتنا لنحتفل معاً بقصة حبنا بوجود أغلى الناس ❤️
+            </p>
+
+            <!-- Scroll Indicator -->
+            <div class="mt-10 text-roseGold-500">
+                <a href="#countdown" class="text-xs font-bold flex flex-col items-center gap-2 opacity-80 hover:opacity-100 transition-opacity">
+                    <span>التفاصيل والعد التنازلي</span>
+                    <i class="fas fa-chevron-down animate-bounce text-sm"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- COUNTDOWN TIMER SECTION -->
+        <section id="countdown" class="cheerful-card rounded-3xl p-6 md:p-10 text-center relative overflow-hidden">
+            <div class="absolute -top-10 -left-10 w-32 h-32 bg-blush-200/50 rounded-full blur-xl pointer-events-none"></div>
+            
+            <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-roseGold-50 text-roseGold-600 text-xs font-bold mb-3">
+                <i class="fas fa-clock"></i>
+                <span>جاهزون للفرح؟</span>
+            </div>
+            
+            <h2 class="font-cairo font-extrabold text-2xl md:text-4xl text-roseGold-700 mb-2">العد التنازلي للحفل الكبير 🎉</h2>
+            <p class="text-xs md:text-sm text-gray-500 mb-8 font-medium">نعد الأيام والساعات حتى نلتقي بضحكاتكم وفرحتكم معنا</p>
+
+            <div class="grid grid-cols-4 gap-3 md:gap-6 max-w-2xl mx-auto" dir="ltr">
+                <!-- Days -->
+                <div class="bg-white/95 border-2 border-roseGold-200 rounded-2xl p-3 md:p-5 flex flex-col items-center shadow-sm">
+                    <span id="days" class="font-cairo text-2xl md:text-5xl font-black text-roseGold-600">00</span>
+                    <span class="text-xs md:text-sm text-gray-600 font-bold mt-1">أيام</span>
+                </div>
+                <!-- Hours -->
+                <div class="bg-white/95 border-2 border-roseGold-200 rounded-2xl p-3 md:p-5 flex flex-col items-center shadow-sm">
+                    <span id="hours" class="font-cairo text-2xl md:text-5xl font-black text-roseGold-600">00</span>
+                    <span class="text-xs md:text-sm text-gray-600 font-bold mt-1">ساعة</span>
+                </div>
+                <!-- Minutes -->
+                <div class="bg-white/95 border-2 border-roseGold-200 rounded-2xl p-3 md:p-5 flex flex-col items-center shadow-sm">
+                    <span id="minutes" class="font-cairo text-2xl md:text-5xl font-black text-roseGold-600">00</span>
+                    <span class="text-xs md:text-sm text-gray-600 font-bold mt-1">دقيقة</span>
+                </div>
+                <!-- Seconds -->
+                <div class="bg-white/95 border-2 border-roseGold-200 rounded-2xl p-3 md:p-5 flex flex-col items-center shadow-sm">
+                    <span id="seconds" class="font-cairo text-2xl md:text-5xl font-black text-roseGold-600">00</span>
+                    <span class="text-xs md:text-sm text-gray-600 font-bold mt-1">ثانية</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- WEDDING DETAILS SECTION -->
+        <section id="details" class="space-y-8">
+            <div class="text-center space-y-2">
+                <h2 class="font-cairo font-black text-3xl md:text-4xl text-roseGold-700">موعد ومكان الفرح 📍</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-roseGold-300 via-roseGold-500 to-goldAccent-400 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Date Card -->
+                <div class="cheerful-card cheerful-card-hover rounded-2xl p-6 text-center space-y-3">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-roseGold-100 text-roseGold-600 flex items-center justify-center text-2xl shadow-inner">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-xl">التاريخ</h3>
+                    <p class="text-roseGold-700 font-extrabold text-lg">20 نوفمبر (20/11)</p>
+                    <p class="text-xs text-gray-500 font-medium">في تمام الساعة 7:00 مساءً</p>
+                </div>
+
+                <!-- Location Card -->
+                <div class="cheerful-card cheerful-card-hover rounded-2xl p-6 text-center space-y-3">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-roseGold-100 text-roseGold-600 flex items-center justify-center text-2xl shadow-inner">
+                        <i class="fas fa-map-marked-alt"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-xl">مكان الحفل</h3>
+                    <p class="text-roseGold-700 font-extrabold text-lg">نادي وادي النيل</p>
+                    <p class="text-xs text-gray-500 font-medium">كورنيش النيل - المعادي (القاهرة)</p>
+                </div>
+
+                <!-- Atmosphere Card -->
+                <div class="cheerful-card cheerful-card-hover rounded-2xl p-6 text-center space-y-3">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-roseGold-100 text-roseGold-600 flex items-center justify-center text-2xl shadow-inner">
+                        <i class="fas fa-glass-cheers"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-800 text-xl">الأجواء</h3>
+                    <p class="text-roseGold-700 font-extrabold text-lg">بهجة وأغاني وفرحة!</p>
+                    <p class="text-xs text-gray-500 font-medium">حضوركم هو أجمل هداياكم لنا 🌸</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+                <a href="https://maps.google.com/?q=Wadi+El+Nile+Club+Maadi+Cairo" target="_blank" rel="noopener noreferrer" 
+                   class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-roseGold-600 to-roseGold-500 hover:from-roseGold-500 hover:to-roseGold-600 text-white font-extrabold flex items-center justify-center gap-3 transition-all duration-300 shadow-lg hover:shadow-roseGold-300/60 hover:scale-[1.02]">
+                    <i class="fas fa-location-arrow text-xl"></i>
+                    <span>موقع القاعة على الخريطة (Google Maps)</span>
+                </a>
+
+                <button onclick="addToCalendar()" 
+                        class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white border-2 border-roseGold-300 hover:border-roseGold-500 text-roseGold-700 font-extrabold flex items-center justify-center gap-3 transition-all duration-300 shadow-sm hover:bg-roseGold-50">
+                    <i class="far fa-calendar-plus text-xl"></i>
+                    <span>إضافة إلى التقويم</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- RSVP FORM SECTION -->
+        <section id="rsvp" class="cheerful-card rounded-3xl p-6 md:p-10 border-2 border-roseGold-300 shadow-xl relative overflow-hidden">
+            <div class="text-center space-y-2 mb-8">
+                <span class="px-3 py-1 rounded-full bg-roseGold-100 text-roseGold-700 text-xs font-bold">تأكيد الحضور</span>
+                <h2 class="font-cairo font-black text-3xl text-roseGold-700">هتنورونا ولا إيه؟ 🥳</h2>
+                <p class="text-xs md:text-sm text-gray-600 font-medium">يرجى تأكيد حضوركم لنسعد بتجهيز كل التفاصيل لاستقبالكم</p>
+            </div>
+
+            <form id="rsvpForm" onsubmit="handleRSVP(event)" class="space-y-6 max-w-xl mx-auto">
+                <div>
+                    <label class="block text-sm font-extrabold text-gray-800 mb-2" for="guestName">اسمك الكريم / العائلة *</label>
+                    <input type="text" id="guestName" required placeholder="اكتب اسمك هنا..."
+                           class="w-full px-4 py-3.5 rounded-xl bg-white border-2 border-roseGold-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-roseGold-500 focus:ring-2 focus:ring-roseGold-200 transition-all font-medium">
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-extrabold text-gray-800 mb-2">تأكيد الحضور *</label>
+                        <select id="attendanceStatus" 
+                                class="w-full px-4 py-3.5 rounded-xl bg-white border-2 border-roseGold-200 text-gray-800 focus:outline-none focus:border-roseGold-500 focus:ring-2 focus:ring-roseGold-200 transition-all font-medium">
+                            <option value="Yes">جاايين نفرح معاكم أكيد! ✨</option>
+                            <option value="No">للأسف أعتذر عن الحضور 🌸</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-extrabold text-gray-800 mb-2" for="attendeesCount">عدد الأفراد المرافقين</label>
+                        <select id="attendeesCount" 
+                                class="w-full px-4 py-3.5 rounded-xl bg-white border-2 border-roseGold-200 text-gray-800 focus:outline-none focus:border-roseGold-500 focus:ring-2 focus:ring-roseGold-200 transition-all font-medium">
+                            <option value="1">شخص واحد (أنا فقط)</option>
+                            <option value="2">شخصين</option>
+                            <option value="3">3 أشخاص</option>
+                            <option value="4+">عائلة (4 أشخاص أو أكثر)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-extrabold text-gray-800 mb-2" for="rsvpNote">كلمة حلوة أو تهنئة للعروسين 💌</label>
+                    <textarea id="rsvpNote" rows="3" placeholder="اكتب دعوة جميلة أو كلمة حلوة لأيمن وأشرقت..."
+                              class="w-full px-4 py-3.5 rounded-xl bg-white border-2 border-roseGold-200 text-gray-800 placeholder-gray-400 focus:outline-none focus:border-roseGold-500 focus:ring-2 focus:ring-roseGold-200 transition-all font-medium resize-none"></textarea>
+                </div>
+
+                <button type="submit" 
+                        class="w-full py-4 rounded-xl bg-gradient-to-r from-roseGold-600 via-roseGold-500 to-roseGold-600 hover:opacity-95 text-white font-extrabold text-lg transition-all duration-300 shadow-lg hover:shadow-roseGold-400/50">
+                    إرسال وتأكيد الحضور 🎉
+                </button>
+            </form>
+        </section>
+
+        <!-- EMPTY INITIAL GUESTBOOK SECTION -->
+        <section id="guestbook" class="space-y-6">
+            <div class="text-center space-y-2">
+                <span class="px-3 py-1 rounded-full bg-goldAccent-300/40 text-goldAccent-600 text-xs font-bold">دفتر المعازيم</span>
+                <h2 class="font-cairo font-black text-3xl md:text-4xl text-roseGold-700">تهاني الأهل والأصدقاء ❤️</h2>
+                <p class="text-xs md:text-sm text-gray-600 font-medium">شاركونا تهانيكم وأمنياتكم الطيبة، وستظل محفوظة دائماً في صفحة العروسين</p>
+                <div class="w-16 h-1 bg-roseGold-300 mx-auto rounded-full"></div>
+            </div>
+
+            <!-- Messages Grid -->
+            <div id="messagesContainer" class="grid md:grid-cols-2 gap-4 max-h-[550px] overflow-y-auto pr-1 pl-1">
+                <!-- Zero preset messages initially. Rendered dynamically via JS -->
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-10 border-t border-roseGold-200/60 space-y-3">
+            <p class="font-ruqaa text-4xl vibrant-gradient-text">عقبال عندكم جميعاً ونفرح بيكم!</p>
+            <p class="text-xs font-bold text-gray-500">أيمن ❤️ أشرقت • 20 نوفمبر • نادي وادي النيل بالمعادي</p>
+        </footer>
+
+    </div>
+
+    <!-- RSVP SUCCESS MODAL -->
+    <div id="successModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="cheerful-card max-w-md w-full rounded-3xl p-6 md:p-8 text-center space-y-5 border-2 border-roseGold-400 shadow-2xl animate-bounce-short">
+            <div class="w-20 h-20 bg-roseGold-100 text-roseGold-600 rounded-full flex items-center justify-center mx-auto text-4xl shadow-inner">
+                <i class="fas fa-heart text-roseGold-500"></i>
+            </div>
+            <h3 class="font-cairo font-extrabold text-2xl text-roseGold-700">تسلم وتعيش! 🎉</h3>
+            <p id="modalMessage" class="text-gray-700 text-sm md:text-base leading-relaxed font-medium">
+                تم تسجيل إجابتك بنجاح. مستنيينكم بنار الشوق نفرح سوا!
+            </p>
+            <button onclick="closeModal()" class="w-full py-3 rounded-xl bg-roseGold-600 hover:bg-roseGold-700 text-white font-extrabold text-base transition-colors shadow-md">
+                تمام، مستعدين للفرح! 🥳
+            </button>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT CODE -->
+    <script>
+        /* -------------------------------------------------------------
+         * 1. Dual Engine Audio System (Web Audio Synth + Audio Element)
+         * ------------------------------------------------------------- */
+        let audioContext = null;
+        let isAudioPlaying = false;
+        let synthInterval = null;
+        let htmlAudio = null;
+
+        // Initialize Web Audio API Synth Melodic Chords Fallback
+        function startSynthAudio() {
+            if (isAudioPlaying) return;
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return false;
+                
+                if (!audioContext) {
+                    audioContext = new AudioCtx();
+                }
+                
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+
+                // Romantic Arpeggiated Chord Frequencies (F Major / C Major Romantic Scale)
+                const notes = [
+                    [174.61, 220.00, 261.63, 329.63], // Fmaj7
+                    [207.65, 261.63, 311.13, 392.00], // Abmaj7
+                    [196.00, 246.94, 293.66, 349.23], // G7
+                    [130.81, 164.81, 196.00, 246.94]  // Cmaj7
+                ];
+
+                let chordIdx = 0;
+
+                function playChord() {
+                    if (!audioContext || audioContext.state !== 'running') return;
+                    
+                    const currentChord = notes[chordIdx % notes.length];
+                    chordIdx++;
+
+                    currentChord.forEach((freq, idx) => {
+                        const osc = audioContext.createOscillator();
+                        const gain = audioContext.createGain();
+
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(freq, audioContext.currentTime + (idx * 0.25));
+
+                        gain.gain.setValueAtTime(0, audioContext.currentTime + (idx * 0.25));
+                        gain.gain.linearRampToValueAtTime(0.04, audioContext.currentTime + (idx * 0.25) + 0.1);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + (idx * 0.25) + 2.5);
+
+                        osc.connect(gain);
+                        gain.connect(audioContext.destination);
+
+                        osc.start(audioContext.currentTime + (idx * 0.25));
+                        osc.stop(audioContext.currentTime + (idx * 0.25) + 2.6);
+                    });
+                }
+
+                playChord();
+                synthInterval = setInterval(playChord, 3200);
+                setAudioUI(true);
+                return true;
+            } catch (e) {
+                console.error("Web Audio Synth failed:", e);
+                return false;
+            }
+        }
+
+        function stopSynthAudio() {
+            if (synthInterval) {
+                clearInterval(synthInterval);
+                synthInterval = null;
+            }
+            if (audioContext && audioContext.state === 'running') {
+                audioContext.suspend();
+            }
+        }
+
+        // Try playing standard audio element or fallback to synth
+        function initAudioEngine() {
+            if (isAudioPlaying) return;
+
+            if (!htmlAudio) {
+                htmlAudio = new Audio("https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=romantic-wedding-melody-112191.mp3");
+                htmlAudio.loop = true;
+                htmlAudio.volume = 0.5;
+            }
+
+            const playPromise = htmlAudio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    setAudioUI(true);
+                }).catch(() => {
+                    // Network or Autoplay restriction triggered - activate synthesized audio fallback
+                    const synthStarted = startSynthAudio();
+                    if (!synthStarted) {
+                        setAudioUI(false);
+                    }
+                });
+            }
+        }
+
+        function setAudioUI(playing) {
+            isAudioPlaying = playing;
+            const visualizer = document.getElementById('visualizer');
+            const musicText = document.getElementById('musicText');
+            const musicIcon = document.getElementById('musicIcon');
+
+            if (playing) {
+                visualizer.classList.remove('paused');
+                musicText.innerText = "الموسيقى شغالـة 🎵";
+                musicIcon.className = "fas fa-volume-up text-roseGold-600";
+            } else {
+                visualizer.classList.add('paused');
+                musicText.innerText = "الموسيقى متوقفة 🔇";
+                musicIcon.className = "fas fa-volume-mute text-roseGold-400";
+            }
+        }
+
+        function toggleAudioManual() {
+            if (isAudioPlaying) {
+                if (htmlAudio) htmlAudio.pause();
+                stopSynthAudio();
+                setAudioUI(false);
+            } else {
+                initAudioEngine();
+            }
+        }
+
+        // Auto-start music on VERY FIRST gesture anywhere on page
+        function attachGlobalAudioUnlock() {
+            const unlockEvents = ['click', 'touchstart', 'scroll', 'pointerdown', 'keydown'];
+            
+            const handleUserInteraction = () => {
+                initAudioEngine();
+                unlockEvents.forEach(evt => window.removeEventListener(evt, handleUserInteraction));
+            };
+
+            unlockEvents.forEach(evt => window.addEventListener(evt, handleUserInteraction, { once: true }));
+        }
+
+        /* -------------------------------------------------------------
+         * 2. LocalStorage Guestbook Management (Starts Completely Empty)
+         * ------------------------------------------------------------- */
+        function getStoredMessages() {
+            const saved = localStorage.getItem('ayman_ashraqat_guestbook_v2');
+            if (saved) {
+                try {
+                    return JSON.parse(saved);
+                } catch (e) {
+                    console.error("Error parsing saved guestbook", e);
+                }
+            }
+            return []; // Completely empty initially
+        }
+
+        function saveMessages(messages) {
+            localStorage.setItem('ayman_ashraqat_guestbook_v2', JSON.stringify(messages));
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('messagesContainer');
+            const messages = getStoredMessages();
+            container.innerHTML = '';
+
+            if (messages.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full cheerful-card rounded-2xl p-8 text-center space-y-3 border-dashed border-2 border-roseGold-200">
+                        <div class="text-roseGold-400 text-3xl">
+                            <i class="fas fa-feather-alt"></i>
+                        </div>
+                        <p class="text-gray-700 font-extrabold text-base">كن أول من يهنئ أيمن وأشرقت وشاركهم فرحتهم! 🌸</p>
+                        <p class="text-gray-500 text-xs">اكتب كلمتك الجميلة في نموذج تأكيد الحضور بالأعلى لتظهر هنا فوراً.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            messages.forEach(msg => {
+                const card = document.createElement('div');
+                card.className = "cheerful-card rounded-2xl p-4 md:p-5 border-2 border-roseGold-100 space-y-2 hover:border-roseGold-300 transition-all shadow-sm";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-roseGold-100 pb-2">
+                        <span class="font-extrabold text-roseGold-700 text-sm md:text-base flex items-center gap-2">
+                            <i class="fas fa-comment-heart text-roseGold-400"></i>
+                            ${escapeHTML(msg.name)}
+                        </span>
+                        <span class="text-[11px] text-gray-400 font-bold bg-roseGold-50 px-2 py-0.5 rounded-full">${msg.date}</span>
+                    </div>
+                    <p class="text-gray-700 text-sm leading-relaxed font-medium pt-1">${escapeHTML(msg.text)}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        /* -------------------------------------------------------------
+         * 3. Confetti Celebration Burst Effect
+         * ------------------------------------------------------------- */
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 110,
+                    spread: 85,
+                    origin: { y: 0.6 },
+                    colors: ['#f43f63', '#fb718d', '#d4af37', '#ffffff']
+                });
+            }
+        }
+
+        /* -------------------------------------------------------------
+         * 4. RSVP Form Submission
+         * ------------------------------------------------------------- */
+        function handleRSVP(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('guestName').value.trim();
+            const note = document.getElementById('rsvpNote').value.trim();
+            const attendance = document.getElementById('attendanceStatus').value;
+
+            if (!name) return;
+
+            // Trigger celebration confetti
+            triggerConfetti();
+
+            // Save congratulation in localStorage if provided
+            if (note) {
+                const currentMessages = getStoredMessages();
+                currentMessages.unshift({
+                    name: name,
+                    text: note,
+                    date: "الآن"
+                });
+                saveMessages(currentMessages);
+                renderMessages();
+            }
+
+            // Show custom modal
+            const modalMessage = document.getElementById('modalMessage');
+            if (attendance === 'Yes') {
+                modalMessage.innerText = `يا أهلاً ويا سهلاً بـ (${name})! تم تأكيد حضورك بنجاح. منتظرينكم بفارغ الصبر لنحتفل سوياً بأجمل ليلة! 🥳💖`;
+            } else {
+                modalMessage.innerText = `شكراً لتواصلك يا (${name}). هنفتقد وجودك جداً، ونتمنى تعوضها لنا في المناسبات السعيدة القادمة! 🌸`;
+            }
+
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('rsvpForm').reset();
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+        }
+
+        /* -------------------------------------------------------------
+         * 5. Live Countdown Timer (Target: November 20)
+         * ------------------------------------------------------------- */
+        function initCountdown() {
+            const now = new Date();
+            let targetYear = now.getFullYear();
+            let targetDate = new Date(targetYear, 10, 20, 19, 0, 0); // Month 10 = Nov
+
+            if (now > targetDate) {
+                targetDate = new Date(targetYear + 1, 10, 20, 19, 0, 0);
+            }
+
+            function updateTimer() {
+                const currentTime = new Date().getTime();
+                const difference = targetDate.getTime() - currentTime;
+
+                if (difference > 0) {
+                    const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+                    document.getElementById('days').innerText = String(days).padStart(2, '0');
+                    document.getElementById('hours').innerText = String(hours).padStart(2, '0');
+                    document.getElementById('minutes').innerText = String(minutes).padStart(2, '0');
+                    document.getElementById('seconds').innerText = String(seconds).padStart(2, '0');
+                } else {
+                    document.getElementById('days').innerText = "00";
+                    document.getElementById('hours').innerText = "00";
+                    document.getElementById('minutes').innerText = "00";
+                    document.getElementById('seconds').innerText = "00";
+                }
+            }
+
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        /* -------------------------------------------------------------
+         * 6. Floating Hearts & Petals Canvas
+         * ------------------------------------------------------------- */
+        function initHeartsCanvas() {
+            const canvas = document.getElementById('hearts-canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            const particles = [];
+            const particleCount = 28;
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    size: Math.random() * 10 + 8,
+                    speedY: Math.random() * 0.8 + 0.4,
+                    speedX: Math.random() * 0.5 - 0.25,
+                    opacity: Math.random() * 0.6 + 0.3,
+                    isHeart: Math.random() > 0.4
+                });
+            }
+
+            function drawHeart(x, y, size, color) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.translate(x, y);
+                ctx.fillStyle = color;
+                const topCurveHeight = size * 0.3;
+                ctx.moveTo(0, topCurveHeight);
+                ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+                ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, size, 0, size);
+                ctx.bezierCurveTo(0, size, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+                ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, width, height);
+
+                particles.forEach(p => {
+                    const color = `rgba(244, 63, 99, ${p.opacity})`;
+                    if (p.isHeart) {
+                        drawHeart(p.x, p.y, p.size, color);
+                    } else {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(212, 175, 55, ${p.opacity})`;
+                        ctx.fill();
+                    }
+
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+
+                    if (p.y > height + 20) {
+                        p.y = -15;
+                        p.x = Math.random() * width;
+                    }
+                });
+
+                requestAnimationFrame(animateParticles);
+            }
+
+            animateParticles();
+        }
+
+        /* -------------------------------------------------------------
+         * 7. Google Calendar Link
+         * ------------------------------------------------------------- */
+        function addToCalendar() {
+            const title = encodeURIComponent("حفل زفاف أيمن وأشرقت 💍🎉");
+            const details = encodeURIComponent("يتشرف أيمن وأشرقت بدعوتكم لحضور حفل زفافهم في نادي وادي النيل بالمعادي.");
+            const location = encodeURIComponent("نادي وادي النيل - المعادي, القاهرة");
+            
+            const now = new Date();
+            let year = now.getFullYear();
+            const startDate = `${year}1120T170000Z`; 
+            const endDate = `${year}1120T210000Z`;
+
+            const googleCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startDate}/${endDate}&details=${details}&location=${location}`;
+            window.open(googleCalUrl, '_blank');
+        }
+
+        window.onload = function () {
+            attachGlobalAudioUnlock();
+            initCountdown();
+            initHeartsCanvas();
+            renderMessages();
+        };
+    </script>
+</body>
+</html>
